@@ -1,3 +1,4 @@
+
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.preprocessing.text import Tokenizer
@@ -6,9 +7,14 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Embedding, LSTM, Dense
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.utils import to_categorical
+import io
+import requests
 
 # Step 1: Prepare and load the labeled dataset
-data = pd.read_csv('https://github.com/Dhruv-Sharma01/Chat_classification-using-LSTM/blob/bad5f17856f57527bb9b1c83fcfcba3afbe759d6/summer.csv')  # Replace with the path to your labeled dataset
+url = 'https://raw.githubusercontent.com/Dhruv-Sharma01/Chat_classification-using-LSTM/main/summer.csv'
+read_data = requests.get(url).content
+
+data = pd.read_csv(io.StringIO(read_data.decode('utf-8')))  
 sentences = data['sentence']
 labels = data['label']
 
@@ -50,10 +56,9 @@ model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=10, batch_s
 loss, accuracy = model.evaluate(X_test, y_test, verbose=0)
 print(f"Test Set Accuracy: {accuracy*100:.2f}%")
 
-# Step 8: Load and process the new sentences to predict
-
+# Step 8: Load and process the ne
 u=input()
-new_sentences = []
+new_sentences = [u]
 while u!='exit':
    u=input()
    new_sentences.append(u)
